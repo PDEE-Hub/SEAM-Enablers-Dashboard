@@ -47,6 +47,7 @@ body{font-family:'Sarabun','Segoe UI',sans-serif;font-size:15px;background:#F0F4
 .dots{display:flex;flex-wrap:wrap;gap:4px;margin-top:2px;}
 .dot{width:17px;height:17px;border-radius:4px;}
 .footer{margin-top:auto;padding-top:8px;border-top:1px solid #f1f5f9;font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:4px;}
+.card-disabled{opacity:.55;cursor:not-allowed;pointer-events:none;}
 </style>
 </head>
 <body>
@@ -88,33 +89,34 @@ body{font-family:'Sarabun','Segoe UI',sans-serif;font-size:15px;background:#F0F4
 </div>
 
 <script>
+const BASE = "https://pdee-hub.github.io/";
 const DIMS = [
   {key:"sm", id:"4.1",nameTh:"การมุ่งเน้นผู้มีส่วนได้ส่วนเสีย",nameEn:"Stakeholder Management",
-   file:"sm.html",weight:15,orig:3.08,score:null,status:"wip",
+   file:BASE+"Enablers-Forecast-Score-69_SM/",weight:15,orig:3.08,score:null,status:"wip",
    dots:["d-g1","d-a","d-a","d-x","d-r","d-a","d-g1","d-a","d-a"]},
   {key:"cm", id:"4.2",nameTh:"การมุ่งเน้นลูกค้า",nameEn:"Customer Management",
-   file:"cm.html",weight:10,orig:3.42,score:null,status:"done",
+   file:BASE+"Enablers-Forecast-Score-69_CM/",weight:10,orig:3.42,score:null,status:"done",
    dots:["d-g1","d-g1","d-g1","d-g1","d-g1","d-g1","d-g1"]},
   {key:"sp", id:"2",  nameTh:"การวางแผนยุทธศาสตร์",nameEn:"Strategic Planning",
-   file:"sp.html",weight:15,orig:2.54,score:null,status:"wip",
+   file:BASE+"Enablers-Forecast-Score-69_SP/",weight:15,orig:2.54,score:null,status:"wip",
    dots:["d-g1","d-g1","d-g1","d-a","d-r","d-a","d-a","d-a","d-a","d-a"]},
   {key:"hcm",id:"6",  nameTh:"การบริหารทุนมนุษย์",nameEn:"Human Capital Management",
-   file:"hcm.html",weight:15,orig:3.07,score:null,status:"done",
+   file:BASE+"Enablers-Forecast-Score-69_HCM/",weight:15,orig:3.07,score:null,status:"done",
    dots:["d-g1","d-g1","d-a","d-g1","d-a","d-a","d-g1","d-g1","d-a","d-g1"]},
   {key:"km", id:"7.1",nameTh:"การจัดการความรู้",nameEn:"Knowledge Management",
-   file:"km.html",weight:8,orig:null,score:null,status:"todo",dots:[]},
+   file:BASE+"Enablers-Forecast-Score-69_KM/",weight:8,orig:null,score:null,status:"todo",dots:[]},
   {key:"im", id:"7.2",nameTh:"การจัดการนวัตกรรม",nameEn:"Innovation Management",
-   file:"im.html",weight:8,orig:1.99,score:null,status:"wip",
+   file:BASE+"Enablers-Forecast-Score-69_IM/",weight:8,orig:1.99,score:null,status:"wip",
    dots:["d-a","d-a","d-a","d-a","d-r","d-r","d-a","d-a","d-a","d-a","d-a","d-a"]},
   {key:"ia", id:"8",  nameTh:"การตรวจสอบภายใน",nameEn:"Internal Audit",
-   file:"ia.html",weight:10,orig:2.76,score:null,status:"wip",
+   file:"#",weight:10,orig:2.76,score:null,status:"wip",
    dots:["d-a","d-g1","d-g1","d-g1","d-g2","d-g1","d-a","d-g1","d-a","d-a","d-a","d-a","d-r","d-g2"]},
   {key:"cg", id:"9",  nameTh:"การกำกับดูแลกิจการ",nameEn:"Corporate Governance",
-   file:"cg.html",weight:7,orig:null,score:null,status:"todo",dots:[]},
+   file:"#",weight:7,orig:null,score:null,status:"todo",dots:[]},
   {key:"rm", id:"10", nameTh:"บริหารความเสี่ยง & ควบคุมภายใน",nameEn:"Risk Management & IC",
-   file:"rm.html",weight:5,orig:null,score:null,status:"todo",dots:[]},
+   file:"#",weight:5,orig:null,score:null,status:"todo",dots:[]},
   {key:"dt", id:"11", nameTh:"การเปลี่ยนผ่านดิจิทัล",nameEn:"Digital Transformation",
-   file:"dt.html",weight:7,orig:null,score:null,status:"todo",dots:[]}
+   file:"#",weight:7,orig:null,score:null,status:"todo",dots:[]}
 ];
 const SL = {done:"เสร็จแล้ว",wip:"กำลังทำ",todo:"ยังไม่เริ่ม"};
 function f2(n){return n?n.toFixed(2):"—";}
@@ -132,7 +134,8 @@ DIMS.forEach(d=>{
   const yoy=dy!==null?(dy>=0?'<span class="yoy-up">▲ '+Math.abs(dy).toFixed(2)+' จากปีก่อน</span>':'<span class="yoy-dn">▼ '+Math.abs(dy).toFixed(2)+' จากปีก่อน</span>'):'<span class="yoy-na">รอข้อมูล</span>';
   const scoreHtml=sc?'<span class="score-num">'+f2(sc)+'</span><span class="score-unit">คะแนน</span>':'<span class="score-na">—</span>';
   const a=document.createElement('a');
-  a.className='card'; a.href=d.file;
+  a.className='card'+(d.file==='#'?' card-disabled':''); a.href=d.file;
+  if(d.file==='#'){a.onclick=function(e){e.preventDefault();};a.title='ยังไม่พร้อมใช้งาน';}
   a.innerHTML='<div class="card-top"><span class="code">'+d.key.toUpperCase()+'</span><span class="wt">'+d.weight+'%</span><span class="badge '+d.status+'">'+SL[d.status]+'</span></div>'+
     '<div><div class="name-th">'+d.nameTh+'</div><div class="name-en">'+d.nameEn+'</div></div>'+
     '<div class="score-row">'+scoreHtml+'</div>'+
